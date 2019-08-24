@@ -61,6 +61,7 @@ https://pytorch.org/tutorials/beginner/blitz/tensor_tutorial.html#sphx-glr-begin
 
 
 
+
 2.Example form "ProgrammingKnowledge"
 (a.)
 Ex:
