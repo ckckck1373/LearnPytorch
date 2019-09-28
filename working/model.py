@@ -65,7 +65,7 @@ class Upsampler(nn.Module):
 
 
 # 9/27 還沒有run過
-class ZebraSRNet(nn.Module, ResBlock, Upsampler):
+class ZebraSRNet(ResBlock, Upsampler,nn.Module):
     def __init__(self, nFeat=16, nResBlock=2, nChannel=3, scale=4, kernel_size=3, act=nn.ReLU(True), bias=True):
         super(ZebraSRNet, self).__init__()
         modulesZ=[]
