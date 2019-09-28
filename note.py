@@ -81,3 +81,33 @@ Ex:
 
 
     
+class BasicBlock(nn.Module):
+    # see https://pytorch.org/docs/0.4.0/_modules/torchvision/models/resnet.html
+    def __init__(self, inplanes, planes, stride=1):
+        super(BasicBlock, self).__init__()
+        self.conv1 = nn.Conv2d(inplanes, planes, kernel_size=3, stride=stride, padding=1, bias=False)
+        self.bn1 = nn.BatchNorm2d(planes)
+        self.relu = nn.ReLU(inplace=True)
+        self.conv2 = nn.Conv2d(planes, planes, kernel_size=3, padding=1, bias=False)
+        self.bn2 = nn.BatchNorm2d(planes)
+
+    def forward(self, x):
+        residual = x
+        out = self.conv1(x)
+        out = self.bn1(out)
+        out = self.relu(out)
+        out = self.conv2(out)
+        out = self.bn2(out)
+        out += residual
+        out = self.relu(out)
+        return outs
+
+
+3.Resnet
+    梯度彌散：基於反向傳遞法計算梯度優化的神經網路，由於反向傳播求隱藏層梯度時利用的鏈式法則，
+            導致淺層隱藏層的梯度會出現劇烈的衰減，這也就是梯度消失問題的本源。
+
+    退化問題：層數過深的平原網路有更高的訓練誤差（中間可能有一些layer的input、output是一樣的（extra layers））
+    
+    
+    
