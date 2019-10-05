@@ -51,7 +51,7 @@ class ResBlock(nn.Module):
 # you can refer to ResBlock and  Figure 6 to construct the model definition of Upsampler and ZebraSRNet
 #======================================================
 class Upsampler(nn.Module):
-    def __init__(self, scale, nFeat, kernel_size, act=False): #什麼是bn(?)
+    def __init__(self, scale, nFeat, act=False): 
         super(Upsampler, self).__init__()
         modulesU=[]
         modulesU.append(nn.Conv2d(nFeat, 4*nFeat , 3, bias=True, padding= kernel_size //2))
@@ -65,24 +65,29 @@ class Upsampler(nn.Module):
 
 
 # 9/27 還沒有run過
-class ZebraSRNet(ResBlock, Upsampler,nn.Module):
-    def __init__(self, nFeat=16, nResBlock=2, nChannel=3, scale=4, kernel_size=3, act=nn.ReLU(True), bias=True):
+class ZebraSRNet(nn.Module):
+    def __init__(self, nFeat=64, nResBlock=16, nChannel=3, scale=4, kernel_size=3:
         super(ZebraSRNet, self).__init__()
-        modulesZ=[]
-        modulesZ.append(nn.Conv2d(in_channel=3, out_channel=16, kernel_size=kernel_size))
-        modulesZ.append(ResBlock.body)
-        modulesZ.append(ResBlock.body)
-        modulesZ.append(Upsampler.body)
-        modulesZ.append(Upsampler.body)
-        modulesZ.append(nn.Conv2d(in_channel=16, out_channel=3, kernel_size=kernel_size))
-        self.body=nn.Sequential(*modulesZ)
+        # add the defination of layer here
+        self.conv1=nn.Conv2d(nChannel, nFeat, 3, 1, 1)
+        modules=[]
+        for _ in range(nResBlock): # Why we need for loop here? ＝>有幾個resnet就append幾次
+            modules.append(ResBlock(nFeat))
+        self.body = nn.Sequential(*modules) # What is the *'s meaning => 因為sequential不接受列表 我們需要用*運算符號對其進行分解
+        self.upsamp1 = upsampler(scale//2, nFeat)
+        self.upsamp2 = upsampler(scale//2, nFeat)
+        self.conv2 = nn.Ccnv2d(nFeat, nChannel, 3, 1, 1)
 
 
     def forward(self, x):
         # connect the layer together according to the Fig. 6 in the pdf 
-        output=self.body(x)
-        return output
+        x = self.conv1(x)
+        f_x = self.body(x)
+        f_x = f_x + x
+        f_x = self.upsamp1(f_x)
+        output = self.conv2(f_x)
 
+        return output
 
 
     # def forward(self, x):
