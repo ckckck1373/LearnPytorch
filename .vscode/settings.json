@@ -1,3 +1,7 @@
 {
+<<<<<<< HEAD
     "maven.view": "hierarchical"
+=======
+    "python.pythonPath": "/usr/local/bin/python3"
+>>>>>>> d9d23b8d833b603a57c18775ab19e74ebb45acf8
 }

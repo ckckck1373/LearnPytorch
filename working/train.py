@@ -1,7 +1,3 @@
-# To add a new cell, type '#%%'
-# To add a new markdown cell, type '#%% [markdown]'
-
-#%%
 from __future__ import print_function
 
 import torch
@@ -25,7 +21,7 @@ parser.add_argument('--nFeat', type=int, default=16, help='channel number of fea
 parser.add_argument('--nResBlock', type=int, default=2, help='number of residual blocks')
 parser.add_argument('--nTrain', type=int, default=2, help='number of training images')
 parser.add_argument('--nVal', type=int, default=1, help='number of validation images')
-parser.add_argument('--cuda', action='store_true', help='use cuda?')
+parser.add_argument('--cuda', action='store_true', default=True , help='use cuda?')
 parser.add_argument('--lr', type=float, default=1e-4, help='Learning Rate. Default=1e-4')
 parser.add_argument('--threads', type=int, default=4, help='number of threads for data loader to use, if Your OS is window, please set to 0')
 parser.add_argument('--seed', type=int, default=715, help='random seed to use. Default=715')
@@ -75,7 +71,7 @@ def train(epoch):
 
         optimizer.zero_grad()
         loss = criterion(net(varIn), varTar)
-        epoch_loss += loss.data[0]
+        epoch_loss += loss.data #loss.data[0]
         loss.backward()
         optimizer.step()
 
@@ -96,7 +92,7 @@ def validate():
 
         prediction = net(varIn)
         mse = mse_criterion(prediction, varTar)
-        psnr = 10 * log10(255*255/mse.data[0])
+        psnr = 10 * log10(255*255/mse.data)#mse.data[0]
         avg_psnr += psnr
     print("===> Avg. PSNR: {:.4f} dB".format(avg_psnr / len(val_data_loader)))
 
@@ -108,8 +104,6 @@ def checkpoint(epoch):
 
 #===== Main procedure =====
 for epoch in range(1, args.nEpochs + 1):
-    train(epoch)
+    train(epoch) #
     validate()
     checkpoint(epoch)
-
-

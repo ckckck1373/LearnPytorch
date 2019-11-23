@@ -23,7 +23,7 @@ parser.add_argument('--input_image', type=str, required=True, help='input image 
 parser.add_argument('--model', type=str, required=True, help='model file to use')
 parser.add_argument('--output_filename', type=str, required=True, help='where to save the output image')
 parser.add_argument('--compare_image', type=str, help='ground-truth image to compare with the output image')
-parser.add_argument('--cuda', action='store_true', help='use cuda?')
+parser.add_argument('--cuda', action='true', help='use cuda?')
 args = parser.parse_args()
 
 print(args)
